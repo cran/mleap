@@ -1,10 +1,11 @@
-b4521bde4bb65b0ce7d6dc7084166cd1 *DESCRIPTION
+4b41967109f33a82b15e2c4d3d846f99 *DESCRIPTION
 5736a989562323a6e5e7d58b39fd6a2e *NAMESPACE
+2f436e8ae20655a6eb8aa39d2c9518ef *NEWS.md
 636efd434a10d0f80dd14897913196bc *R/dependencies.R
 a29ff82161df8e7dfe768df5c860662e *R/installers.R
-948ab1724c149ac91275033a5948bd76 *R/mleap.R
+7fda2e613c26bc92c7aabe4bf28a825a *R/mleap.R
 2ae98471fce532f082597b3e73c99431 *R/package.R
-5214d944cae363c5889a3b5b3b7b0611 *R/prediction.R
+91410da6104fb45c7e975bc69fe36510 *R/prediction.R
 bd1bcb980c1b08a69582e94d754d8fde *R/utils.R
 6d7822fd28f8fca318f3a38551875262 *inst/extdata/config.json
 f10744af9903589014b1916c2f5e56aa *inst/java/mleap-2.0-2.11.jar
@@ -24,4 +25,4 @@ a6c97074ff906926d74c2cc6e7d82e6a *tests/testthat.R
 d6c04a4af129e0db75af27c03b03eeb8 *tests/testthat/output/iris_model_schema.txt
 05b665573848fc5c9de2200f35c42750 *tests/testthat/output/mtcars_model_schema.txt
 087377330698e7bedb37556e4e56ba25 *tests/testthat/test-installation.R
-daf347d1c607f96155200c5272da4488 *tests/testthat/test-serving.R
+c5898fa6289e54dac8d9a47a5080d45e *tests/testthat/test-serving.R
