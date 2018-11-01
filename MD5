@@ -1,13 +1,13 @@
-43d863e9e145e7f9bfa0ac9cf8ee8eca *DESCRIPTION
+9fc8bf3a81e63cc82f58f01d2c0f0031 *DESCRIPTION
 5736a989562323a6e5e7d58b39fd6a2e *NAMESPACE
-0308619ec3fd8abe8c3491eaa9af87ad *NEWS.md
-636efd434a10d0f80dd14897913196bc *R/dependencies.R
-dd14ac06c9726facb97f24b5a5f8f64c *R/installers.R
+407b499491b8b9e0661875b10c29b5e5 *NEWS.md
+6baca1e0894c94942254aceac4b4d036 *R/dependencies.R
+6a150dda09b8409b196fdb4771f8884a *R/installers.R
 7fda2e613c26bc92c7aabe4bf28a825a *R/mleap.R
 2ae98471fce532f082597b3e73c99431 *R/package.R
 91410da6104fb45c7e975bc69fe36510 *R/prediction.R
 bd1bcb980c1b08a69582e94d754d8fde *R/utils.R
-ff79d33e67f1ad2fd17d419efe32facc *inst/extdata/config.json
+6da6bdca481826cc793a20e9ba48f489 *inst/extdata/config.json
 416ec0b2fc59ab89d697029e3e825569 *inst/java/mleap-2.0-2.11.jar
 2c3b6afe6b4ef08421482e2aacc69867 *inst/java/mleap-2.1-2.11.jar
 bbf7d809f6d3d92806fb9d394352a2d6 *inst/java/mleap-2.2-2.11.jar
@@ -24,5 +24,5 @@ a6c97074ff906926d74c2cc6e7d82e6a *tests/testthat.R
 5171d74fef70b60b6a3af4fe05514c5c *tests/testthat/helpers-initialize.R
 d6c04a4af129e0db75af27c03b03eeb8 *tests/testthat/output/iris_model_schema.txt
 05b665573848fc5c9de2200f35c42750 *tests/testthat/output/mtcars_model_schema.txt
-087377330698e7bedb37556e4e56ba25 *tests/testthat/test-installation.R
+40720a38a126da9edf4d3f9db53da2b8 *tests/testthat/test-installation.R
 c31fb561ec6b722fe1be48e7a37df41c *tests/testthat/test-serving.R

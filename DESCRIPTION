@@ -1,7 +1,7 @@
 Package: mleap
 Type: Package
 Title: Interface to 'MLeap'
-Version: 0.1.2
+Version: 0.1.3
 Authors@R: c(
   person("Kevin", "Kuo", role = c("aut", "cre"), email = "kevin.kuo@rstudio.com",
   comment = c(ORCID = "0000-0001-7803-7901"))
@@ -21,8 +21,8 @@ Imports: sparklyr, jsonlite, purrr, fs, tibble, rJava, digest
 RoxygenNote: 6.0.1
 Suggests: testthat, covr, ggplot2, dplyr
 NeedsCompilation: no
-Packaged: 2018-05-23 15:37:24 UTC; kevinykuo
+Packaged: 2018-10-31 23:49:56 UTC; kevinykuo
 Author: Kevin Kuo [aut, cre] (<https://orcid.org/0000-0001-7803-7901>)
 Maintainer: Kevin Kuo <kevin.kuo@rstudio.com>
 Repository: CRAN
-Date/Publication: 2018-05-23 15:50:29 UTC
+Date/Publication: 2018-11-01 09:40:03 UTC
