@@ -36,30 +36,41 @@ mleap_model_schema <- function(x) {
 }
 
 retrieve_model_schema <- function(jobj) {
-  schema <- jobj$root()$schema()$fields()
+  input_schema <- jobj$root()$inputSchema()$fields()
+  output_schema <- jobj$root()$outputSchema()$fields()
   ct <- rJava::.jnew("scala.reflect.ClassTag$")
-  ct <- ct$`MODULE$`$apply(schema$head()$getClass())
+  ct <- ct$`MODULE$`$apply(input_schema$head()$getClass())
   
-  schema$toArray(ct) %>%
-    as.list() %>%
-    purrr::map(function(x) {
-      data_type <- x$dataType()
-      base_type <- data_type$base()$toString()
-      dimensions <- tryCatch(
-        data_type$dimensions()$get()$toIterable()$array() %>%
-          paste0("(", ., ")", collapse = ", "),
-        error = function(e) NA_character_
-      )
-      is_nullable <- data_type$isNullable()
-      list(x$name(),
-           base_type,
-           is_nullable,
-           dimensions)
+  get_schema_tbl <- function(schema, ct, io) {
+    df <- schema$toArray(ct) %>%
+      as.list() %>%
+      purrr::map(function(x) {
+        data_type <- x$dataType()
+        base_type <- data_type$base()$toString()
+        dimensions <- tryCatch(
+          data_type$dimensions()$get()$toIterable()$array() %>%
+            paste0("(", ., ")", collapse = ", "),
+          error = function(e) NA_character_
+        )
+        is_nullable <- data_type$isNullable()
+        list(x$name(),
+             base_type,
+             is_nullable,
+             dimensions)
       }) %>%
-    purrr::transpose() %>%
-    purrr::set_names(c("name", "type", "nullable", "dimension")) %>%
-    purrr::map(unlist) %>%
-    tibble::as_tibble()
+      purrr::transpose() %>%
+      purrr::set_names(c("name", "type", "nullable", "dimension")) %>%
+      purrr::map(unlist) %>%
+      tibble::as_tibble()
+    
+    df$io <- io
+    df
+  }
+  
+  rbind(
+    get_schema_tbl(input_schema, ct, "input"),
+    get_schema_tbl(output_schema, ct, "output")
+  )
 }
 
 #' Loads an MLeap bundle
@@ -79,6 +90,7 @@ mleap_load_bundle <- function(path) {
     ctx_builder, "Lml/combust/mleap/runtime/MleapContext;", 
     "createMleapContext"
     )
+  path <- normalizePath(path)
   bundle_file <- rJava::.jnew("java.io.File", path)
   bundle_builder <- rJava::.jnew("ml.combust.mleap.runtime.javadsl.BundleBuilder")
   transformer <- rJava::.jcall(
@@ -94,7 +106,7 @@ mleap_load_bundle <- function(path) {
 #' This functions serializes a Spark pipeline model into an MLeap bundle.
 #' 
 #' @param x A Spark pipeline model object.
-#' @param dataset A Spark DataFrame with the schema of the transformed DataFrame.
+#' @param sample_input A sample input Spark DataFrame with the expected schema.
 #' @param path Where to save the bundle.
 #' @param overwrite Whether to overwrite an existing file, defaults to \code{FALSE}.
 #' 
@@ -110,13 +122,13 @@ mleap_load_bundle <- function(path) {
 #' pipeline_model <- ml_fit(pipeline, mtcars_tbl)
 #' model_path <- file.path(tempdir(), "mtcars_model.zip")
 #' ml_write_bundle(pipeline_model, 
-#'                 ml_transform(pipeline_model, mtcars_tbl),
+#'                 mtcars_tbl,
 #'                 model_path,
 #'                 overwrite = TRUE)
 #' }
 #' 
 #' @export
-ml_write_bundle <- function(x, dataset, path, overwrite = FALSE) {
+ml_write_bundle <- function(x, sample_input, path, overwrite = FALSE) {
   stages <- if (purrr::is_bare_list(x)) {
     purrr::map(x, sparklyr::spark_jobj)
   } else {
@@ -124,8 +136,15 @@ ml_write_bundle <- function(x, dataset, path, overwrite = FALSE) {
   }
   
   sc <- sparklyr::spark_connection(stages[[1]])
-  sdf <- sparklyr::spark_dataframe(dataset)
+  
+  sdf <- x %>% 
+    sparklyr::ml_transform(sample_input) %>% 
+    sparklyr::spark_dataframe()
+  
   path <- resolve_path(path)
+  
+  if (!identical(fs::path_ext(path), "zip"))
+    stop("The bundle path must have a `.zip` extension.", call. = FALSE)
 
   if (fs::file_exists(path)) {
     if (!overwrite) {
